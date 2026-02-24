@@ -152,36 +152,6 @@ for keyword in keywords:
     search_and_download(keyword, min_width=300, min_height=300)
 ```
 
-### Accessing Download Results
-
-After execution, files are organized as follows:
-
-```python
-# Images are saved in organized directories
-images/
-├── apple/
-│   ├── apple_1.jpg
-│   ├── apple_2.jpg
-│   ├── ...
-│   └── apple_inventory.xlsx
-├── banana/
-│   ├── banana_1.jpg
-│   ├── ...
-│   └── banana_inventory.xlsx
-└── master_inventory.xlsx
-
-# Read inventory data
-import pandas as pd
-
-# Load master inventory
-master_df = pd.read_excel("images/master_inventory.xlsx")
-print(f"Total images: {len(master_df)}")
-
-# Load keyword-specific inventory
-apple_df = pd.read_excel("images/apple/apple_inventory.xlsx")
-print(f"Apple images: {len(apple_df)}")
-```
-
 ## Configuration Options
 
 The tool provides multiple configuration constants in `src/main.py`:
@@ -282,50 +252,3 @@ uv run mypy .
 ```bash
 uv run ruff format .
 ```
-
-## Troubleshooting
-
-### Common Issues
-
-**Chrome/ChromeDriver Issues:**
-- **Error**: "ChromeDriver not found"
-  - **Solution**: The script uses `webdriver-manager` to auto-download. Ensure internet access.
-- **Error**: "Chrome version mismatch"
-  - **Solution**: Update Google Chrome to the latest version
-
-**Memory Issues:**
-- **Error**: Out of memory errors
-  - **Solution**: Reduce `DEFAULT_SCROLLS` or limit `max_workers` in thread pool
-
-**Network Issues:**
-- **Error**: Timeout errors during download
-  - **Solution**: Increase `REQUEST_TIMEOUT` constant
-  - **Solution**: Check internet connection stability
-
-**No Images Downloaded:**
-- **Issue**: Found images but none meet size requirements
-  - **Solution**: Lower `DEFAULT_MIN_WIDTH` and `DEFAULT_MIN_HEIGHT`
-  - **Solution**: Use more specific keywords for higher quality results
-
-## Best Practices
-
-### Keyword Selection
-- Use descriptive, specific keywords for better results (e.g., "red apple fruit close-up")
-- Test with small batches before large-scale scraping
-- Avoid special characters that might break URLs
-
-### Legal and Ethical Considerations
-- Respect Google's Terms of Service
-- Use downloaded images in compliance with copyright laws
-- Attribute sources when required
-- Consider using images for personal/educational purposes only
-
-### Dataset Management
-- Use master inventory to track dataset composition
-- Regularly backup downloaded images
-- Document keyword selection rationale for reproducibility
-
-## License
-
-This project is licensed under the MIT License.
-
