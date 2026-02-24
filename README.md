@@ -1,154 +1,331 @@
 # Image Scraper
 
-## 概要
+A high-performance Python tool for batch downloading images from Google Images with quality control and intelligent organization. This tool automates large-scale image collection using Selenium WebDriver, parallel processing, and automatic inventory management.
 
-Image Scraper 是一個強大的自動圖片抓取工具，旨在幫助使用者快速搜尋並下載符合條件的圖片。專案同時提供完整的構建與打包工作流，支援多平台的應用程式打包與發佈。
+## Overview
 
----
+The Image Scraper addresses the challenge of collecting large quantities of quality-controlled images for machine learning, design, research, or dataset creation. Whether you're building training datasets, collecting reference images, or conducting visual research, this tool provides fast and reliable batch image downloading capabilities.
 
-## 開始使用
+Key capabilities:
+- Download images in bulk based on keyword searches from Google Images
+- Automatically filter images by minimum dimensions to ensure quality
+- Organize downloads into structured directories with Excel inventory tracking
+- Process multiple keywords simultaneously using parallel execution
+- Handle both URL-based and base64-encoded images seamlessly
+- Prevent duplicate downloads across multiple runs
 
-在 GitHub 頁面中，進入本專案的 [Releases](https://github.com/YOUR_USERNAME/YOUR_REPOSITORY/releases) 頁面。
+## Features
 
-選擇最新的發佈版本。
+- **High Performance**: Multi-threaded execution optimized for available CPU cores
+- **Headless Browsing**: Selenium WebDriver with Chrome in headless mode for efficient background operation
+- **Quality Control**: Automatic image size validation with configurable minimum dimensions
+- **Duplicate Prevention**: Tracks downloaded images to avoid redundant downloads
 
-根據您使用的操作系統下載對應的檔案：
+## Get Started
 
-- `my_app-windows.zip` (適用於 Windows)
-- `my_app-macos.tar` (適用於 macOS)
-- `my_app-linux.tar` (適用於 Linux)
+### Prerequisites
 
-解壓縮下載的檔案，並根據需要執行應用程式。
+Before you begin, ensure you have:
+- [uv](https://docs.astral.sh/uv/getting-started/installation/) installed on your system. uv is an extremely fast Python package installer and resolver.
+- Google Chrome browser installed
+- Internet connection for downloading ChromeDriver and images
 
----
+### Installation
 
-## 自動圖片抓取工具
-
-### 功能
-
-- **無頭瀏覽**：使用 Selenium WebDriver 與無頭模式的 Chrome 進行圖片抓取。
-- **基於關鍵字的搜尋**：根據指定的食物名稱搜尋 Google 圖片。
-- **並行執行**：同時下載多個關鍵字的圖片以節省時間。
-- **尺寸驗證**：確保圖片符合最小寬度和高度的要求。
-
-### 需求
-
-- Python 3.10+
-- 依賴項：
-  - `selenium`
-  - `webdriver-manager`
-  - `beautifulsoup4`
-  - `requests`
-  - `pillow`
-  - `lxml`
-  - `tenacity`
-
-### 使用方法
-
-1. 在專案目錄下創建名為 `key_word_list.txt` 的檔案，並添加以逗號分隔的關鍵字。例如：
-   ```
-   apple,banana,orange
-   ```
-2. 執行腳本：
-   ```bash
-   python scraper.py
-   ```
-3. 圖片將保存於 `images/<food_name>` 資料夾中。
-
-### 函式
-
-#### `scroll_page`
-
-滾動頁面多次以載入更多圖片。
-
-#### `verify_image_size`
-
-驗證圖片是否符合最小尺寸要求。
-
-#### `search_and_download`
-
-搜尋圖片並下載符合條件的圖片。
-
-### 並行執行
-
-此腳本使用 `ThreadPoolExecutor` 同時執行多個關鍵字的搜尋與下載。
-
----
-
-## 構建與打包工作流
-
-### 功能
-
-- **多平台支持**：自動構建並打包適用於 `Windows`、`macOS` 和 `Linux` 的應用程式。
-- **上傳產物**：將打包的檔案壓縮並作為 GitHub Actions 產物上傳。
-- **版本化發佈**：自動生成版本號並在推送到 `main` 分支時創建 GitHub 發佈。
-
-### 工作流細節
-
-#### 觸發條件
-
-- 推送到 `main` 分支。
-- 針對 `main` 分支的拉取請求。
-
-#### 構建工作
-
-`build` 任務在以下操作系統上執行：
-
-- `ubuntu-latest`
-- `macos-latest`
-- `windows-latest`
-
-執行步驟包括：
-
-1. **檢出程式碼**
-2. **設置 Python 環境**
-3. **安裝依賴項**
-4. **打包應用程式**
-5. **上傳產物**
-
-#### 發佈工作
-
-此任務僅在以下情況下創建發佈：
-
-- 推送到 `main` 分支。
-
-執行步驟包括：
-
-1. **生成版本號**
-2. **下載產物**
-3. **創建 GitHub 發佈**
-
-### 工作流檔案
-
-請參考 `.github/workflows/build-and-release.yml` 以獲取實現細節。
-
----
-
-## 目錄結構
-
-```
-.
-├── images/                # 圖片保存目錄
-├── archive/               # 壓縮檔案目錄
-├── dist/                  # 構建產物目錄
-├── key_word_list.txt      # 關鍵字列表檔案
-├── main.py                # 應用程式進入點
-├── scraper.py             # 圖片抓取腳本
-├── requirements.txt       # Python 依賴項
-└── .github/workflows/     # GitHub Actions 工作流
+1. **Clone or navigate to the project:**
+```bash
+git clone git@gitlab.seanyeh77.com:seanyeh77/image-scaper.git
+cd "Image Scraper"
 ```
 
----
+2. **Install all dependencies:**
+```bash
+uv sync
+```
 
-## 注意事項
+This will automatically create a virtual environment and install all required dependencies.
 
-- 確保已安裝 Google Chrome 和 ChromeDriver，以便 Selenium 正常工作。
-- 抓取圖片時請遵守 Google 的服務條款。
-- 如果需要不同的尺寸限制，可在 `scraper.py` 中調整 `MIN_WIDTH` 和 `MIN_HEIGHT` 變數。
+3. **Install package in editable mode (optional):**
+```bash
+uv pip install -e .
+```
 
----
+This allows you to import the module from anywhere in your project.
 
-## 授權
+### Quick Start
 
-本專案採用 MIT 授權條款。
+Run the image scraper with example keywords:
+
+```bash
+uv run python src/main.py
+```
+
+This will:
+1. Read keywords from `input/key_word_list.txt`
+2. Search Google Images for each keyword
+3. Download filtered images to `images/<keyword>/` directories
+4. Generate Excel inventories tracking all downloads
+
+## Architecture
+
+The tool follows a functional design optimized for batch processing and maintainability:
+
+- **`src/main.py`**: Complete image scraping pipeline with modular functions
+  - **`load_keywords()`**: Parse comma-separated keywords from input file
+  - **`initialize_chrome_driver()`**: Configure headless Chrome WebDriver
+  - **`fetch_image_links()`**: Scroll pages and extract image URLs from Google Images
+  - **`verify_image_size()`**: Validate images meet minimum dimension requirements
+  - **`save_images()`**: Download and save validated images with sequential naming
+  - **`update_excel_inventory()`**: Track downloads in Excel files
+  - **`search_and_download()`**: Orchestrate complete search and download workflow
+
+**Design Principles:**
+- Functional separation for easy testing and maintenance
+- Configurable constants for customization without code changes
+- Type hints throughout for better code documentation
+- Parallel execution with thread pooling for optimal performance
+
+## Usage
+
+### Basic Keyword Search
+
+Create your keyword list and run a simple search:
+
+```python
+# 1. Create input/key_word_list.txt with comma-separated keywords
+# Content: apple,banana,orange
+
+# 2. Run the scraper
+uv run python src/main.py
+```
+
+**Output:**
+```
+Processing 3 keywords: apple, banana, orange
+Searching for images of 'apple'...
+Found 47 images for 'apple'
+Successfully downloaded 32 images for 'apple' (meeting size requirements)
+Searching for images of 'banana'...
+Found 51 images for 'banana'
+Successfully downloaded 38 images for 'banana' (meeting size requirements)
+...
+All downloads completed!
+```
+
+### Customizing Search Parameters
+
+Adjust constants in `src/main.py` for different requirements:
+
+```python
+# Modify image quality requirements
+DEFAULT_MIN_WIDTH = 300      # Increase minimum width to 300px
+DEFAULT_MIN_HEIGHT = 300     # Increase minimum height to 300px
+
+# Adjust page scrolling for more images
+DEFAULT_SCROLLS = 20         # Scroll more times to load more images
+SCROLL_DELAY = 3             # Wait longer between scrolls
+
+# Change timeout settings
+REQUEST_TIMEOUT = 15         # Increase timeout for slow connections
+```
+
+### Using the Image Scraper Programmatically
+
+Import and use the scraper in your own scripts:
+
+```python
+from pathlib import Path
+from src.main import search_and_download, load_keywords
+
+# Load keywords from file
+keywords = load_keywords(Path("input/key_word_list.txt"))
+
+# Download images for a single keyword
+search_and_download(
+    keyword="machine learning",
+    min_width=500,
+    min_height=500
+)
+
+# Process multiple keywords
+for keyword in keywords:
+    search_and_download(keyword, min_width=300, min_height=300)
+```
+
+### Accessing Download Results
+
+After execution, files are organized as follows:
+
+```python
+# Images are saved in organized directories
+images/
+├── apple/
+│   ├── apple_1.jpg
+│   ├── apple_2.jpg
+│   ├── ...
+│   └── apple_inventory.xlsx
+├── banana/
+│   ├── banana_1.jpg
+│   ├── ...
+│   └── banana_inventory.xlsx
+└── master_inventory.xlsx
+
+# Read inventory data
+import pandas as pd
+
+# Load master inventory
+master_df = pd.read_excel("images/master_inventory.xlsx")
+print(f"Total images: {len(master_df)}")
+
+# Load keyword-specific inventory
+apple_df = pd.read_excel("images/apple/apple_inventory.xlsx")
+print(f"Apple images: {len(apple_df)}")
+```
+
+## Configuration Options
+
+The tool provides multiple configuration constants in `src/main.py`:
+
+| Constant | Default | Description |
+|----------|---------|-------------|
+| `DEFAULT_MIN_WIDTH` | 150 | Minimum image width in pixels |
+| `DEFAULT_MIN_HEIGHT` | 150 | Minimum image height in pixels |
+| `DEFAULT_SCROLLS` | 10 | Number of page scrolls to load more images |
+| `SCROLL_DELAY` | 2 | Seconds between each scroll |
+| `PAGE_LOAD_DELAY` | 3 | Initial page load wait time |
+| `REQUEST_TIMEOUT` | 10 | Timeout for image downloads (seconds) |
+| `IMAGES_DIR` | "images" | Output directory for downloaded images |
+| `INPUT_DIR` | "input" | Input directory for keyword list |
+| `KEYWORD_FILE` | "key_word_list.txt" | Keyword list filename |
+| `MASTER_INVENTORY_FILE` | "master_inventory.xlsx" | Master inventory filename |
+
+### Chrome WebDriver Configuration
+
+The tool configures Chrome with these options:
+```python
+--headless                  # Run without GUI
+--no-sandbox               # Required for some Linux environments
+--disable-gpu              # Improves stability in headless mode
+--disable-dev-shm-usage    # Prevents memory issues in containers
+```
+
+## Project Structure
+
+```
+Image Scraper/
+├── README.md                    # Project documentation
+├── pyproject.toml              # Python dependencies and project metadata
+├── uv.lock                     # Dependency lock file
+├── .python-version             # Python version specification
+├── .gitignore                  # Git ignore rules
+│
+├── input/                      # Input data directory
+│   └── key_word_list.txt      # Comma-separated keyword list
+│
+├── src/                        # Source code directory
+│   ├── __init__.py            # Package marker
+│   └── main.py                # Core image scraping implementation
+│       ├── scroll_page()                 # Page scrolling function
+│       ├── verify_image_size()          # Image dimension validation
+│       ├── initialize_chrome_driver()    # WebDriver configuration
+│       ├── fetch_image_links()          # Image URL extraction
+│       ├── download_image()             # Image download handler
+│       ├── save_images()                # Batch image saving
+│       ├── update_excel_inventory()     # Excel tracking
+│       ├── search_and_download()        # Main workflow orchestration
+│       ├── load_keywords()              # Keyword file parser
+│       └── main()                       # Entry point
+│
+└── images/                     # Generated output directory (created on first run)
+    ├── <keyword1>/            # Images for keyword1
+    │   ├── <keyword1>_1.jpg
+    │   ├── <keyword1>_2.jpg
+    │   ├── ...
+    │   └── <keyword1>_inventory.xlsx
+    ├── <keyword2>/            # Images for keyword2
+    │   ├── <keyword2>_1.jpg
+    │   ├── ...
+    │   └── <keyword2>_inventory.xlsx
+    └── master_inventory.xlsx  # Master inventory file
+```
+
+## Dependencies
+
+- **Web Automation**: `selenium` - WebDriver for Chrome automation
+- **Driver Management**: `webdriver-manager` - Automatic ChromeDriver installation and updates
+- **HTML Parsing**: `beautifulsoup4` - HTML/XML parsing, `lxml` - Fast XML/HTML parser
+- **Image Processing**: `pillow` - Image format handling and dimension validation
+- **HTTP Requests**: `requests` - HTTP library for image downloading
+- **Excel Generation**: `openpyxl` - Excel file creation and manipulation
+- **Data Processing**: Built-in Python libraries (`pathlib`, `concurrent.futures`, `typing`)
+
+See [pyproject.toml](pyproject.toml) for the complete dependency list.
+
+## Development Tools
+
+### Running Tests
+```bash
+uv run pytest
+```
+
+### Code Linting
+```bash
+uv run ruff check .
+```
+
+### Type Checking
+```bash
+uv run mypy .
+```
+
+### Code Formatting
+```bash
+uv run ruff format .
+```
+
+## Troubleshooting
+
+### Common Issues
+
+**Chrome/ChromeDriver Issues:**
+- **Error**: "ChromeDriver not found"
+  - **Solution**: The script uses `webdriver-manager` to auto-download. Ensure internet access.
+- **Error**: "Chrome version mismatch"
+  - **Solution**: Update Google Chrome to the latest version
+
+**Memory Issues:**
+- **Error**: Out of memory errors
+  - **Solution**: Reduce `DEFAULT_SCROLLS` or limit `max_workers` in thread pool
+
+**Network Issues:**
+- **Error**: Timeout errors during download
+  - **Solution**: Increase `REQUEST_TIMEOUT` constant
+  - **Solution**: Check internet connection stability
+
+**No Images Downloaded:**
+- **Issue**: Found images but none meet size requirements
+  - **Solution**: Lower `DEFAULT_MIN_WIDTH` and `DEFAULT_MIN_HEIGHT`
+  - **Solution**: Use more specific keywords for higher quality results
+
+## Best Practices
+
+### Keyword Selection
+- Use descriptive, specific keywords for better results (e.g., "red apple fruit close-up")
+- Test with small batches before large-scale scraping
+- Avoid special characters that might break URLs
+
+### Legal and Ethical Considerations
+- Respect Google's Terms of Service
+- Use downloaded images in compliance with copyright laws
+- Attribute sources when required
+- Consider using images for personal/educational purposes only
+
+### Dataset Management
+- Use master inventory to track dataset composition
+- Regularly backup downloaded images
+- Document keyword selection rationale for reproducibility
+
+## License
+
+This project is licensed under the MIT License.
 
