@@ -48,16 +48,16 @@ jobs:
       - name: Package Application
         run: |
           if [ "${{ matrix.os }}" = "windows-latest" ]; then
-            pyinstaller --onedir --name my_app-windows --distpath dist/windows main.py
+            pyinstaller --onedir --name my_app-windows --distpath dist/windows src/main.py
             cd dist/windows 
             zip -r ../../${{ matrix.artifact_path }} ./my_app-windows/
             cd ../..
           elif [ "${{ matrix.os }}" = "macos-latest" ]; then
-            pyinstaller --onedir --name my_app-macos --distpath dist/macos main.py --hidden-import=PySide2
+            pyinstaller --onedir --name my_app-macos --distpath dist/macos src/main.py --hidden-import=PySide2
             mkdir -p archive/macos
             tar -czf ${{ matrix.artifact_path }} -C dist/macos my_app-macos/
           else
-            pyinstaller --onedir --name my_app-linux --distpath dist/linux main.py
+            pyinstaller --onedir --name my_app-linux --distpath dist/linux src/main.py
             mkdir -p archive/linux
             tar -czf ${{ matrix.artifact_path }} -C dist/linux my_app-linux/
           fi
